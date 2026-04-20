@@ -1,10 +1,9 @@
 %Grid definition.
 %state(Row, Col, Pathy, steps, survivors)
 
-grid([[r, e, d, e, e],
-[e, e, f, e, s],
-[d, e, e, e, d],
-[e, s, e, f, s]]).
+grid([[r, e, s],
+[d, f, e],
+[e, s, e]]).
 
 get_initial_state(Matrix, state(Row, Col, [(Row, Col)], 0, 0)) :-
     nth1(Row, Matrix, R),
@@ -100,9 +99,16 @@ next_state(State, NextState) :-
 heuristic(state(_, _, _, _, Survivors), H) :-
     H = Survivors.
 
-
 greedy([], Visited, Visited).
-    
+
+greedy(Open, Visited, Result) :-
+    pick_best(Open, Current),
+    Current = state(_, _, _, _, S),
+    count_survivors(Total),
+    S =:= Total,
+    !,
+    Result = [Current|Visited].
+
 greedy(Open, Visited, Result) :-
 
     pick_best(Open, Current),
@@ -116,6 +122,11 @@ greedy(Open, Visited, Result) :-
     append(NewOpen, Children, UpdatedOpen),
 
     greedy(UpdatedOpen, [Current|Visited], Result).
+
+count_survivors(Total) :-
+    grid(Matrix),
+    findall(s, (member(Row, Matrix), member(s, Row)), Survivors),
+    length(Survivors, Total).
 
 pick_best([Best], Best).
 
@@ -133,7 +144,7 @@ remove(X, [X|T], T).
 
 remove(X, [H|T], [H|R]) :-
     remove(X, T, R).
-    
+
 solve :-
     grid(Matrix),
     get_initial_state(Matrix, Initial),
@@ -143,4 +154,3 @@ solve :-
     write('Path found: '), write(Path), nl,
     write('Survivors rescued: '), write(Survivors), nl,
     write('Number of steps: '), write(Steps), nl.
-
