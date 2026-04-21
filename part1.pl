@@ -1,9 +1,14 @@
 %Grid definition.
 %state(Row, Col, Pathy, steps, battery)
 
-grid([[r, e, e], 
-[d, f, e], 
-[e, e, s]]). 
+grid([[r, e, e],
+[d, f, e],
+[e, e, s]]).
+
+%grid([[r, e, d, e, e],
+%[e, e, f, e, s],
+%[d, e, e, e, e],
+%[e, s, e, f, e]]).
 
 get_initial_state(Matrix, state(Row, Col, [(Row, Col)], 0, 100)) :-
     nth1(Row, Matrix, R),
