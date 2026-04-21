@@ -5,6 +5,11 @@ grid([[r, e, s],
 [d, f, e],
 [e, s, e]]).
 
+%grid([[r, e, d, e, e],
+%[e, e, f, e, s],
+%[d, e, e, e, d],
+%[e, s, e, f, s]]).
+
 get_initial_state(Matrix, state(Row, Col, [(Row, Col)], 0, 0)) :-
     nth1(Row, Matrix, R),
     nth1(Col, R, r).
@@ -96,8 +101,7 @@ next_state(State, NextState) :-
     down(State, NextState).
 
 
-heuristic(state(_, _, _, _, Survivors), H) :-
-    H = Survivors.
+heuristic(state(_, _, _, _, Survivors), Survivors).
 
 greedy([], Visited, Visited).
 
@@ -132,8 +136,8 @@ pick_best([Best], Best).
 
 pick_best([H|T], Best) :-
     pick_best(T, BestTail),
-    H = state(_,_,_,_,S1),
-    BestTail = state(_,_,_,_,S2),
+    heuristic(H, S1),
+    heuristic(BestTail, S2),
     (S1 >= S2 ->
         Best = H
     ;
