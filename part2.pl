@@ -138,7 +138,7 @@ pick_best([H|T], Best) :-
     pick_best(T, BestTail),
     heuristic(H, S1),
     heuristic(BestTail, S2),
-    (S1 >= S2 ->
+    (S1 > S2 ->
         Best = H
     ;
         Best = BestTail
